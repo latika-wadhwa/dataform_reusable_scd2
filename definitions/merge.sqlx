@@ -1,0 +1,56 @@
+config {
+  type: "operations",
+
+}
+DECLARE src_non_unique STRING;
+DECLARE target_non_unique STRING;
+DECLARE src_unique STRING;
+
+
+SET src_unique = (
+WITH selected_columns as (
+SELECT primary_key_column_name  
+    FROM `dataform_staging.table_to_unique`
+    WHERE 
+    table_name =  "${dataform.projectConfig.vars.src_table}"  and table_catalog = "${dataform.projectConfig.vars.src_database}" and table_schema = "${dataform.projectConfig.vars.src_schema}"
+)
+SELECT STRING_AGG(primary_key_column_name) AS columns FROM selected_columns
+);
+
+SET src_non_unique = (
+WITH selected_columns as (
+SELECT column_name 
+    FROM ${dataform.projectConfig.vars.src_database}. ${dataform.projectConfig.vars.src_schema}.INFORMATION_SCHEMA.COLUMNS
+    WHERE 
+    table_name =  "${dataform.projectConfig.vars.src_table}" and column_name not in (SELECT primary_key_column_name  
+    FROM `dataform_staging.table_to_unique`
+    WHERE 
+    table_name =  "${dataform.projectConfig.vars.src_table}"  and table_catalog = "${dataform.projectConfig.vars.src_database}" and table_schema = "${dataform.projectConfig.vars.src_schema}"
+) and column_name <> "${dataform.projectConfig.vars.timestampfield}" 
+)
+SELECT STRING_AGG(column_name) AS columns FROM selected_columns
+);
+
+SET target_non_unique = (
+WITH selected_columns as (
+SELECT column_name 
+    FROM ${dataform.projectConfig.vars.target_database}. ${dataform.projectConfig.vars.target_schema}.INFORMATION_SCHEMA.COLUMNS
+    WHERE 
+    table_name =  "${dataform.projectConfig.vars.target_table}" and column_name not in (SELECT primary_key_column_name  
+    FROM `dataform_staging.table_to_unique`
+    WHERE 
+    table_name =  "${dataform.projectConfig.vars.src_table}"  and table_catalog = "${dataform.projectConfig.vars.src_database}" and table_schema = "${dataform.projectConfig.vars.src_schema}"
+) and column_name not in( "${dataform.projectConfig.vars.timestampfield}","${dataform.projectConfig.vars.start_from_column_name}","${dataform.projectConfig.vars.start_at_column_name}" ) 
+)
+SELECT STRING_AGG(column_name) AS columns FROM selected_columns
+);
+
+EXECUTE IMMEDIATE format(
+${s2_merge.mergeScript(`${dataform.projectConfig.vars.src_database}.${dataform.projectConfig.vars.src_schema}.${dataform.projectConfig.vars.src_table}`,`${dataform.projectConfig.vars.target_database}.${dataform.projectConfig.vars.target_schema}.${dataform.projectConfig.vars.target_table}`)},src_unique,src_non_unique,src_unique,target_non_unique,src_unique,src_non_unique);
+
+
+
+
+
+
+

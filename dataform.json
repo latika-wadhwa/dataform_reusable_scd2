@@ -1,0 +1,26 @@
+{
+    "defaultSchema": "dataform",
+    "assertionSchema": "dataform_assertions",
+    "warehouse": "bigquery",
+    "defaultDatabase": "latika-experiments",
+    "defaultLocation": "US",
+    "vars": {
+      "src_database":"latika-experiments",
+      "src_schema":"dataform_scd",   
+      "src_table":"source_data_scd_updates", 
+      "target_database":"latika-experiments",
+      "target_schema":"dataform_scd",   
+      "target_table":"source_data_scd_final",
+      "target_hash_unique_col_name":"hash_unique",
+      "target_hash_non_unique_col_name":"hash_non_unique",  
+      "executionDate": "2022-09-30",
+      "timestampfield": "updated_at",
+      "start_from_column_name": "eff_date",  
+      "start_at_column_name": "exp_date",
+      "stagingSchema":"dataform_staging" 
+  
+   }
+   
+  }
+      
+  
