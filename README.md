@@ -10,10 +10,10 @@ Row versioning , Track changes as version records with current flag & active dat
 
 **Example Use case**
 
-The source table for SCD2 is a staging table that follows **append only** and gets it's data everyday from a source 'dataform_scd.source_data'(as below). The unique key combination for this table is data_source and account_number
+The source table for SCD2 is a staging table that follows **append only** and gets it's data everyday from a source 'dataform_scd.source_data' (as below). The unique key combination for this table is data_source and account_number.
 ![image](https://user-images.githubusercontent.com/48508718/194395428-5d291eff-e8eb-4e2c-9462-e5c27838b584.png)
 
-The data from the source table is appended to `dataform_scd.source_data_scd_updates` The unique key combination for this table is data_source, account_number and updated_at. As mentioned above and for this use case the `dataform_scd.source_data_scd_updates` is the source for our SCD2 process. Even though we are not doing any calculations in this use case, the `dataform_scd.source_data_scd_updates` stands for the staging table in a real world scenario which would have data in usable format.
+The data from the source table is appended to `dataform_scd.source_data_scd_updates` The unique key combination for this table is data_source, account_number and updated_at. As mentioned above and for this use case, the `dataform_scd.source_data_scd_updates` is the source for our SCD2 process. Even though we are not doing any calculations in this use case, the `dataform_scd.source_data_scd_updates` stands for the staging table in a real world scenario which would have data in usable format.
 ![image](https://user-images.githubusercontent.com/48508718/194400484-40ea182e-0047-4ba3-9e9d-9f98854cfff8.png)
 
 **Input Parameter**
@@ -35,9 +35,9 @@ The following variables can be set to default or over written in dataform run co
 
 **Flowchart**
 
-![image](https://user-images.githubusercontent.com/48508718/194404612-619e5bad-ea08-4d24-bc81-c2c137c359c4.png)
+![image](https://user-images.githubusercontent.com/48508718/194413334-9620279a-b118-4500-a3ac-dd933c7b18e3.png)
 
-One additional thing to note here is that we are using an internal metadata table (like Information Schema) but would just have the primary keys of each tables(as below). For use cases where this is not valud we can pass the unique values via variables.
+One additional thing to note here is that we are using an internal metadata table (like Information Schema) but would just have the primary keys of each tables(as below). For use cases where this is not valud we can pass the unique values via variables with a little recoding.
 
 ![image](https://user-images.githubusercontent.com/48508718/194410020-07bca06f-25a9-496c-af32-9664fb64f6c4.png)
 
