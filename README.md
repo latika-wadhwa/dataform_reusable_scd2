@@ -1,4 +1,4 @@
-# Reusable Slow Changing Dimension 2
+# Reusable Slow Changing Dimension Type 2
 
 **Slowly Changing Dimension**
 
