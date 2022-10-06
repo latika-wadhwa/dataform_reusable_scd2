@@ -16,11 +16,8 @@
       "executionDate": "2022-09-30",
       "timestampfield": "updated_at",
       "start_from_column_name": "eff_date",  
-      "start_at_column_name": "exp_date",
-      "stagingSchema":"dataform_staging" 
-  
+      "end_at_column_name": "exp_date"
    }
-   
   }
       
   

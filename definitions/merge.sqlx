@@ -40,7 +40,7 @@ SELECT column_name
     FROM `dataform_staging.table_to_unique`
     WHERE 
     table_name =  "${dataform.projectConfig.vars.src_table}"  and table_catalog = "${dataform.projectConfig.vars.src_database}" and table_schema = "${dataform.projectConfig.vars.src_schema}"
-) and column_name not in( "${dataform.projectConfig.vars.timestampfield}","${dataform.projectConfig.vars.start_from_column_name}","${dataform.projectConfig.vars.start_at_column_name}" ) 
+) and column_name not in( "${dataform.projectConfig.vars.timestampfield}","${dataform.projectConfig.vars.start_from_column_name}","${dataform.projectConfig.vars.end_at_column_name}" ) 
 )
 SELECT STRING_AGG(column_name) AS columns FROM selected_columns
 );
