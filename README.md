@@ -10,7 +10,7 @@ Row versioning , Track changes as version records with current flag & active dat
 
 **Example Use case**
 
-THE source table for SCD2 is a staging table that follows **append only** and gets it's data everyday from a source 'dataform_scd.source_data'(as below). The unique key combination for this table is data_source and account_number
+The source table for SCD2 is a staging table that follows **append only** and gets it's data everyday from a source 'dataform_scd.source_data'(as below). The unique key combination for this table is data_source and account_number
 ![image](https://user-images.githubusercontent.com/48508718/194395428-5d291eff-e8eb-4e2c-9462-e5c27838b584.png)
 
 The data from the source table is appended to `dataform_scd.source_data_scd_updates` The unique key combination for this table is data_source, account_number and updated_at. As mentioned above and for this use case the `dataform_scd.source_data_scd_updates` is the source for our SCD2 process. Even though we are not doing any calculations in this use case, the `dataform_scd.source_data_scd_updates` stands for the staging table in a real world scenario which would have data in usable format.
@@ -31,8 +31,7 @@ The following variables can be set to default or over written in dataform run co
       "executionDate": "2022-09-30",                            -- The date from which the data needs to be captured from. For instance if we need data for 2022-10-06 the execution date would be 2022-10-05 
       "timestampfield": "updated_at",                           -- The timestamp column name that records the load date/time of the data
       "start_from_column_name": "eff_date",                     -- The start date of from a record is valid
-      "start_at_column_name": "exp_date",                       -- The end date of from a record is valid
-      "stagingSchema":"dataform_staging"                        -- Staging schema
+      "start_at_column_name": "exp_date"                       -- The end date of from a record is valid
 
 **Flowchart**
 
