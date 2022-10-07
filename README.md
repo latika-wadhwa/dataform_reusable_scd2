@@ -31,7 +31,7 @@ The following variables can be set to default or over written in dataform run co
       "executionDate": "2022-09-30",                            -- The date from which the data needs to be captured from. For instance if we need data for 2022-10-06 the execution date would be 2022-10-05 
       "timestampfield": "updated_at",                           -- The timestamp column name that records the load date/time of the data
       "start_from_column_name": "eff_date",                     -- The start date of from a record is valid
-      "start_at_column_name": "exp_date"                       -- The end date of from a record is valid
+      "end_at_column_name": "exp_date"                       -- The end date of from a record is valid
 
 **Flowchart**
 
