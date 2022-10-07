@@ -37,7 +37,7 @@ function mergeScript(source,target) {
           end   
   WHEN NOT MATCHED BY TARGET THEN
     INSERT(	
-  %s,%s,${dataform.projectConfig.vars.timestampfield},${dataform.projectConfig.vars.start_from_column_name},${dataform.projectConfig.vars.start_at_column_name} )
+  %s,%s,${dataform.projectConfig.vars.timestampfield},${dataform.projectConfig.vars.start_from_column_name},${dataform.projectConfig.vars.end_at_column_name} )
     VALUES(%s, %s,hash_src_unique,hash_src_nonunique,${dataform.projectConfig.vars.timestampfield},${dataform.projectConfig.vars.timestampfield},null)
      """ `;
   }
