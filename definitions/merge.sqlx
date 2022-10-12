@@ -63,7 +63,29 @@ SELECT STRING_AGG(column_name) AS columns FROM selected_columns
 );
 
 EXECUTE IMMEDIATE format(
-${s2_merge.mergeScript(`${dataform.projectConfig.vars.src_database}.${dataform.projectConfig.vars.src_schema}.${dataform.projectConfig.vars.src_table}`,`${dataform.projectConfig.vars.target_database}.${dataform.projectConfig.vars.target_schema}.${dataform.projectConfig.vars.target_table}`)},src_unique,src_non_unique,src_unique,target_non_unique,src_unique,src_non_unique);
+"""
+  MERGE  `${dataform.projectConfig.vars.target_database}.${dataform.projectConfig.vars.target_schema}.${dataform.projectConfig.vars.target_table}` as T
+  USING (SELECT *,
+   TO_BASE64(md5(IFNULL(NULLIF(UPPER(TRIM(CAST(CONCAT(%s)AS STRING))),''),'^^'))) as hash_src_unique, 
+    TO_BASE64(md5(IFNULL(NULLIF(UPPER(TRIM(CAST(CONCAT(%s)AS STRING))),''),'^^'))) as hash_src_nonunique
+  FROM `${dataform.projectConfig.vars.src_database}.${dataform.projectConfig.vars.src_schema}.${dataform.projectConfig.vars.src_table}`
+  where ${dataform.projectConfig.vars.timestampfield} > cast("${dataform.projectConfig.vars.executionDate}" as Date)) S
+  ON   T.${dataform.projectConfig.vars.target_hash_unique_col_name}  =  S.hash_src_unique
+      AND T.${dataform.projectConfig.vars.target_hash_non_unique_col_name} = S.hash_src_nonunique   
+      AND T.${dataform.projectConfig.vars.end_at_column_name} IS NULL  
+  WHEN NOT MATCHED BY SOURCE AND t.${dataform.projectConfig.vars.end_at_column_name} is null THEN
+  UPDATE 
+  SET t.${dataform.projectConfig.vars.end_at_column_name} = 
+          case 
+              when t.${dataform.projectConfig.vars.end_at_column_name} is NULL then
+          (select max(${dataform.projectConfig.vars.timestampfield}) from `${dataform.projectConfig.vars.src_database}.${dataform.projectConfig.vars.src_schema}.${dataform.projectConfig.vars.src_table}`)
+              else t.${dataform.projectConfig.vars.end_at_column_name}
+          end   
+  WHEN NOT MATCHED BY TARGET THEN
+    INSERT(	
+  %s,%s,${dataform.projectConfig.vars.timestampfield},${dataform.projectConfig.vars.start_from_column_name},${dataform.projectConfig.vars.end_at_column_name} )
+    VALUES(%s, %s,hash_src_unique,hash_src_nonunique,${dataform.projectConfig.vars.timestampfield},${dataform.projectConfig.vars.timestampfield},null)
+ """,src_unique,src_non_unique,src_unique,target_non_unique,src_unique,src_non_unique);
 
 
 
